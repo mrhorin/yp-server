@@ -6,7 +6,18 @@ import socketserver
 
 JSON_PATH = './yp.json'
 INTERVAL = 60
-PORT = 8080
+PORT = 7144
+
+# yp_serverを起動
+class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/index.txt':
+            self.path = '/public/index.txt'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+index_txt_handler = IndexTxtRequestHandler
+yp_server = socketserver.TCPServer(("", PORT), index_txt_handler)
+yp_server.serve_forever()
 
 # URLからindex.txtを取得
 def get_index_txt(url):
@@ -28,11 +39,4 @@ while True:
       f.write(res.text)
   print("index.txt is updated.")
   time.sleep(INTERVAL)
-
-# httpサーバー起動
-# Handler = http.server.SimpleHTTPRequestHandler
-# with socketserver.TCPServer(("", PORT), Handler) as httpd:
-#  print("serving at port", PORT)
-#  httpd.serve_forever()
-
 
