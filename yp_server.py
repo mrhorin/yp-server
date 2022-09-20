@@ -4,10 +4,20 @@ import requests
 import http.server
 import socketserver
 import threading
+import argparse
+
+parser = argparse.ArgumentParser()
+
+# ポート番号
+parser.add_argument("--port", "-p",type=int, default=7144 , help="使用するポート番号を指定(default: 7144)")
+# 更新間隔
+parser.add_argument("--interval", "-i", type=int, default=60 , help="index.txtの更新間隔を秒単位で指定(default: 60)")
+
+args = parser.parse_args()
 
 JSON_PATH = './yp.json'
-INTERVAL = 60
-PORT = 7144
+INTERVAL = args.interval
+PORT = args.port
 
 # yp_serverを起動
 class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
