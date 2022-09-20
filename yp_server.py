@@ -9,7 +9,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # ポート番号
-parser.add_argument("--port", "-p",type=int, default=7144 , help="使用するポート番号を指定(default: 7144)")
+parser.add_argument("--port", "-p", type=int, default=7144 , help="使用するポート番号を指定(default: 7144)")
 # 更新間隔
 parser.add_argument("--interval", "-i", type=int, default=60 , help="index.txtの更新間隔を秒単位で指定(default: 60)")
 
@@ -36,7 +36,7 @@ def get_index_txt(url):
 def start_yp_server():
   index_txt_handler = IndexTxtRequestHandler
   yp_server = socketserver.TCPServer(("", PORT), index_txt_handler)
-  print("Started YP server.")
+  print("Started YP server at localhost:" + str(PORT))
   yp_server.serve_forever()
 
 # index.txtの自動更新を開始
