@@ -21,3 +21,23 @@ firewall-cmd  --permanent --add-port=7144/tcp
 firewall-cmd --reload
 systemctl restart firewalld
 ```
+
+## Systemdで起動
+個人的設定例
+```
+[Unit]
+Description=YP server for PeerCast
+After=network.target
+
+
+[Service]
+Type=simple
+User=mrhorin
+WorkingDirectory=/var/www/yp-server
+ExecStart=/home/mrhorin/.pyenv/shims/python /var/www/yp-server/main.py
+ExecReload=/bin/kill -USR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+```
+
