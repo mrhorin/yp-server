@@ -21,7 +21,7 @@ index_txt_list = []
 # チャンネルリストの自動更新
 while True:
   # index.txtに書き込み
-  with open("index.txt", "w") as f:
+  with open("./public/index.txt", "w") as f:
    for i in yp_json:
     res = get_index_txt(i['url'])
     if res.status_code == 200:
