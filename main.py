@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json
+import yaml
 import time
 import requests
 import http.server
@@ -14,7 +14,7 @@ parser.add_argument("--port", "-p", type=int, default=7144 , help="使用する�
 parser.add_argument("--interval", "-i", type=int, default=60 , help="index.txtの更新間隔を秒単位で指定(default: 60)")
 args = parser.parse_args()
 
-JSON_PATH = './yp.json'
+YAML_PATH = './yp.yml'
 INTERVAL = args.interval
 PORT = args.port
 
@@ -40,16 +40,14 @@ def start_yp_server():
 
 # index.txtの自動更新を開始
 def start_updating_index_txt():
-  # yp.jsonを開く
-  yp_json = json.load(open(JSON_PATH, 'r'))
   print("Started updating index.txt")
+  yp_yml = yaml.safe_load(open(YAML_PATH, "r"))
   while True:
-    # index.txtに書き込み
-    with open("./public/index.txt", "w") as f:
-     for i in yp_json:
-       res = get_index_txt(i['url'])
-       if res.status_code == 200:
-         f.write(res.text)
+    with open("./public/index.txt", "w") as file:
+      for yp in yp_yml:
+        res = get_index_txt(yp['url'])
+        if res.status_code == 200:
+          file.write(res.text)
     print("index.txt is updated.")
     time.sleep(INTERVAL)
 

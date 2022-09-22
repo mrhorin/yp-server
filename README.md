@@ -4,14 +4,24 @@
 - でもマンションや寮生活の糞回線でポート開放ができない…
 - VPNも使えない…
 - でもAWS、Heroku、VPS等でサーバなら建てれる…
+- でもサーバでPeerCastは起動したくない…
 
 そんなニッチな需要にお答えするスクリプト
 
 ## 概要
 1. YPサーバ起動（デフォルトはポート7144）
-1. ルードディレクトリにあるyp.jsonに登録したYP一覧からindex.txtを取得しpublic/index.txtに保存
+1. ルードディレクトリにあるyp.ymlに登録したYP一覧からindex.txtを取得しpublic/index.txtに保存
 1. `http://サーバIPアドレス:7144/index.txt`にアクセスすると、保存したindex.txtを取得できる
 1. 一定の間隔（デフォルトでは60秒ごと）でindex.txtを更新する
+
+## YPの追加
+yp.ymlに以下の書式で追加
+```
+- name: YPの名前
+  url: YPのURL
+- name: YPの名前
+  url: YPのURL
+```
 
 ## ポート開放
 以下、CentOS 7で実施した例を示す。
