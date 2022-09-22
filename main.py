@@ -28,7 +28,7 @@ def get_index_txt(url):
   if url[-1] != '/':
     url + '/'
   res = requests.get(url + '/index.txt')
-  res.encoding = res.apparent_encoding
+  res.encoding = 'utf-8'
   return res
 
 # YPサーバの起動
