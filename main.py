@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import json
 import time
 import requests
@@ -26,7 +27,9 @@ class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
 def get_index_txt(url):
   if url[-1] != '/':
     url + '/'
-  return requests.get(url + '/index.txt')
+  res = requests.get(url + '/index.txt')
+  res.encoding = res.apparent_encoding
+  return res
 
 # YPサーバの起動
 def start_yp_server():
