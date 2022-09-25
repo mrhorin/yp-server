@@ -22,7 +22,10 @@ LOG_DIR_PATH = './log/'
 INTERVAL = args.interval
 PORT = args.port
 
-logging.basicConfig(filename=LOG_DIR_PATH + '/error.log', encoding='utf-8', level=logging.ERROR)
+# logディレクトリを追加
+if not os.path.exists(LOG_DIR_PATH):
+  os.mkdir(LOG_DIR_PATH)
+logging.basicConfig(filename=LOG_DIR_PATH + '/error.log', level=logging.ERROR)
 
 class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
   def do_GET(self):
