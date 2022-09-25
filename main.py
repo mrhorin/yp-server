@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import yaml
 import time
 import requests
@@ -7,6 +6,7 @@ import http.server
 import socketserver
 import threading
 import argparse
+import os, os.path
 
 # オプション
 parser = argparse.ArgumentParser()
@@ -15,13 +15,14 @@ parser.add_argument("--interval", "-i", type=int, default=60 , help="index.txt�
 args = parser.parse_args()
 
 YAML_PATH = './yp.yml'
+PUBLIC_DIR_PATH = './public/'
 INTERVAL = args.interval
 PORT = args.port
 
 class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
   def do_GET(self):
     if self.path == '/index.txt':
-      self.path = '/public/index.txt'
+      self.path = PUBLIC_DIR_PATH + '/index.txt'
       return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 def get_index_txt(url):
@@ -41,13 +42,16 @@ def start_yp_server():
 # index.txtの自動更新を開始
 def start_updating_index_txt():
   print("Started updating index.txt")
+  # publicディレクトリを追加
+  if not os.path.exists(PUBLIC_DIR_PATH):
+    os.mkdir(PUBLIC_DIR_PATH)
   yp_yml = yaml.safe_load(open(YAML_PATH, "r"))
   while True:
-    with open("./public/index.txt", "w") as file:
+    with open(PUBLIC_DIR_PATH + "/index.txt", "w") as f:
       for yp in yp_yml:
         res = get_index_txt(yp['url'])
         if res.status_code == 200:
-          file.write(res.text)
+          f.write(res.text)
     print("index.txt is updated.")
     time.sleep(INTERVAL)
 
