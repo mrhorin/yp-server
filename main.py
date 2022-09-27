@@ -27,6 +27,9 @@ if not os.path.exists(LOG_DIR_PATH):
   os.mkdir(LOG_DIR_PATH)
 logging.basicConfig(filename=LOG_DIR_PATH + '/error.log', level=logging.ERROR)
 
+class YpServer(socketserver.TCPServer):
+  allow_reuse_address = True
+
 class IndexTxtRequestHandler(http.server.SimpleHTTPRequestHandler):
   def do_GET(self):
     if self.path == '/index.txt':
@@ -43,10 +46,9 @@ def get_index_txt(url):
 # YPサーバの起動
 def start_yp_server():
   try:
-    index_txt_handler = IndexTxtRequestHandler
-    yp_server = socketserver.TCPServer(("", PORT), index_txt_handler)
-    print("Started YP server at localhost:" + str(PORT))
-    yp_server.serve_forever()
+    with YpServer(("", PORT), IndexTxtRequestHandler) as server:
+      server.serve_forever()
+      print("Started YP server at localhost:" + str(PORT))
   except:
     logging.error(traceback.format_exc())
 
