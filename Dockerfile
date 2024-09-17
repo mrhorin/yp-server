@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.12.6
 
 WORKDIR /yp-server
 COPY . /yp-server
