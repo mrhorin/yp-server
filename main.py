@@ -49,7 +49,8 @@ def start_yp_server():
     with YpServer(("", PORT), IndexTxtRequestHandler) as server:
       server.serve_forever()
       print("Started YP server at localhost:" + str(PORT))
-  except:
+  except Exception as e:
+    print(f"An ERROR occurred in start_updating_index_txt: {e}")
     logging.error(traceback.format_exc())
 
 # index.txtの自動更新を開始
@@ -67,8 +68,12 @@ def start_updating_index_txt():
           if res.status_code == 200: f.write(res.text)
       print("index.txt is updated.")
       time.sleep(INTERVAL)
-  except:
+  except Exception as e:
+    print(f"An ERROR occurred in start_updating_index_txt: {e}")
     logging.error(traceback.format_exc())
+    time.sleep(INTERVAL)
+    start_updating_index_txt()
+
 
 def main():
   t1 = threading.Thread(target=start_yp_server, name='StartYPServer')
